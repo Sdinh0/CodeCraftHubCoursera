@@ -204,16 +204,18 @@ These examples use Bash-style line continuation (`\`). In PowerShell, use
 
 ## Tests
 
-Automated API tests are in `tests/`. They use Flask's test client and Python's
-built-in `unittest` framework, so they do not make live HTTP requests or modify
-the project's course data file. The suite covers successful CRUD and status
+Automated API tests are in `tests/` and use `pytest` with Flask's test client.
+They do not make live HTTP requests or modify the project's course data file;
+each test uses temporary storage. The suite covers successful CRUD and status
 operations, required-field and input validation, invalid JSON, missing-course
 responses, and storage errors.
 
-Run the tests from the project root:
+Install the dependencies if you have not already, then run the tests from the
+project root:
 
 ```bash
-python -m unittest discover -s tests -v
+python -m pip install -r requirements.txt
+python -m pytest
 ```
 
 ## Troubleshooting
