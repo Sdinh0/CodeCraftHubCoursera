@@ -1,0 +1,8 @@
+body {
+  color: #243044;
+  font-family: system-ui, sans-serif;
+  line-height: 1.5;
+  margin: 2rem auto;
+  max-width: 48rem;
+  padding: 0 1rem;
+}
