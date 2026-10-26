@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#8B5CF6">
+  <title>CodeCraftHub | Your Learning Management Platform</title>
+  <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">Your learning, in one place</p>
+      <h1>CodeCraftHub: Your Learning Management Platform</h1>
+      <p>Plan your next step, track your progress, and celebrate what you complete.</p>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel form-panel" aria-labelledby="add-heading">
+      <div class="section-heading">
+        <div>
+          <h2 id="add-heading">Add a course</h2>
+          <p>Set a learning goal and give it a target date.</p>
+        </div>
+      </div>
+      <form id="add-form">
+        <div class="form-grid">
+          <div class="field">
+            <label for="course-name">Course name <span aria-hidden="true">*</span></label>
+            <input id="course-name" name="name" type="text" required maxlength="160" placeholder="e.g. JavaScript Foundations">
+          </div>
+          <div class="field">
+            <label for="target-date">Target date <span aria-hidden="true">*</span></label>
+            <input id="target-date" name="target_date" type="date" required>
+          </div>
+          <div class="field field-wide">
+            <label for="course-description">Description <span aria-hidden="true">*</span></label>
+            <textarea id="course-description" name="description" required maxlength="2000" placeholder="What do you want to learn?"></textarea>
+          </div>
+          <div class="field">
+            <label for="course-status">Status <span aria-hidden="true">*</span></label>
+            <select id="course-status" name="status" required>
+              <option>Not Started</option>
+              <option>In Progress</option>
+              <option>Completed</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="button button-primary" type="submit">Add course</button>
+        </div>
+      </form>
+      <div id="form-notice" class="notice" role="status" aria-live="polite"></div>
+    </section>
+
+    <section aria-labelledby="courses-heading">
+      <div class="section-heading list-heading">
+        <div>
+          <h2 id="courses-heading">Your courses</h2>
+          <p>Keep your goals moving forward.</p>
+        </div>
+        <span id="course-count" class="count">0 courses</span>
+      </div>
+      <div id="loading" class="loading" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span><span id="loading-text">Loading courses…</span>
+      </div>
+      <div id="list-notice" class="notice" role="status" aria-live="polite"></div>
+      <div id="course-list" class="course-grid" aria-live="polite"></div>
+    </section>
+    <footer>Course data is managed by the CodeCraftHub API.</footer>
+  </main>
+
+  <dialog id="edit-dialog" aria-labelledby="edit-heading">
+    <div class="dialog-content">
+      <div class="section-heading">
+        <div>
+          <h2 id="edit-heading">Edit course</h2>
+          <p>Update the course details below.</p>
+        </div>
+      </div>
+      <form id="edit-form">
+        <input type="hidden" name="id">
+        <div class="form-grid">
+          <div class="field">
+            <label for="edit-name">Course name <span aria-hidden="true">*</span></label>
+            <input id="edit-name" name="name" required maxlength="160">
+          </div>
+          <div class="field">
+            <label for="edit-target-date">Target date <span aria-hidden="true">*</span></label>
+            <input id="edit-target-date" name="target_date" type="date" required>
+          </div>
+          <div class="field field-wide">
+            <label for="edit-description">Description <span aria-hidden="true">*</span></label>
+            <textarea id="edit-description" name="description" required maxlength="2000"></textarea>
+          </div>
+          <div class="field">
+            <label for="edit-status">Status <span aria-hidden="true">*</span></label>
+            <select id="edit-status" name="status" required>
+              <option>Not Started</option>
+              <option>In Progress</option>
+              <option>Completed</option>
+            </select>
+          </div>
+        </div>
+        <div id="edit-notice" class="notice" role="status" aria-live="polite"></div>
+        <div class="dialog-actions">
+          <button id="cancel-edit" class="button button-subtle" type="button">Cancel</button>
+          <button class="button button-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </dialog>
+
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
