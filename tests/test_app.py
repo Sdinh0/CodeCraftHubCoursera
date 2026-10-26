@@ -5,7 +5,6 @@ import pytest
 
 import app as course_app
 
-
 VALID_COURSE = {
     "name": "Flask Fundamentals",
     "description": "Learn to build a REST API",
@@ -34,8 +33,10 @@ def test_home_serves_learning_dashboard(client):
     assert response.status_code == 200
     assert response.mimetype == "text/html"
     assert b"CodeCraftHub: Your Learning Management Platform" in response.data
-    assert b'/static/favicon.ico' in response.data
-    assert b'/static/style.css' in response.data
+    assert b"/static/favicon.ico" in response.data
+    assert b"/static/style.css" in response.data
+    assert b"/static/app.js" in response.data
+    assert b"<script>\n" not in response.data
 
 
 def test_dashboard_favicon_is_served(client):
@@ -52,6 +53,14 @@ def test_dashboard_stylesheet_is_served(client):
     assert response.status_code == 200
     assert response.mimetype == "text/css"
     assert b".course-grid" in response.data
+
+
+def test_dashboard_javascript_is_served(client):
+    response = client.get("/static/app.js")
+
+    assert response.status_code == 200
+    assert response.mimetype == "application/javascript"
+    assert b"async function loadCourses()" in response.data
 
 
 def test_missing_data_file_is_created_automatically(client):
@@ -161,52 +170,40 @@ def test_delete_removes_course(client):
     response = client.delete(f"/api/courses/{created['id']}")
 
     assert response.status_code == 200
-    assert response.get_json() == {
-        "message": f"Course with ID {created['id']} deleted"
-    }
+    assert response.get_json() == {"message": f"Course with ID {created['id']} deleted"}
     assert client.get("/api/courses").get_json()["total"] == 0
 
 
 def test_post_rejects_missing_required_fields(client):
-    response = client.post(
-        "/api/courses", json={"name": "Incomplete course"}
-    )
+    response = client.post("/api/courses", json={"name": "Incomplete course"})
 
     assert response.status_code == 400
     assert "Missing required field(s)" in response.get_json()["error"]
 
 
 def test_put_rejects_missing_required_fields(client):
-    response = client.put(
-        "/api/courses/1", json={"name": "Incomplete replacement"}
-    )
+    response = client.put("/api/courses/1", json={"name": "Incomplete replacement"})
 
     assert response.status_code == 400
     assert "Missing required field(s)" in response.get_json()["error"]
 
 
 def test_post_rejects_empty_required_text(client):
-    response = client.post(
-        "/api/courses", json={**VALID_COURSE, "description": " "}
-    )
+    response = client.post("/api/courses", json={**VALID_COURSE, "description": " "})
 
     assert response.status_code == 400
     assert "description field cannot be empty" in response.get_json()["error"]
 
 
 def test_post_rejects_invalid_target_date(client):
-    response = client.post(
-        "/api/courses", json={**VALID_COURSE, "target_date": "12/31/2026"}
-    )
+    response = client.post("/api/courses", json={**VALID_COURSE, "target_date": "12/31/2026"})
 
     assert response.status_code == 400
     assert "YYYY-MM-DD" in response.get_json()["error"]
 
 
 def test_post_rejects_invalid_status(client):
-    response = client.post(
-        "/api/courses", json={**VALID_COURSE, "status": "Paused"}
-    )
+    response = client.post("/api/courses", json={**VALID_COURSE, "status": "Paused"})
 
     assert response.status_code == 400
     assert "Status must be one of" in response.get_json()["error"]

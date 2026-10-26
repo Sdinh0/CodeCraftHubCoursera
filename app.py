@@ -1,10 +1,9 @@
-from datetime import date, datetime, timezone
 import json
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from flask import Flask, Response, jsonify, request, send_file
-
 
 app = Flask(__name__)
 
@@ -225,5 +224,4 @@ def update_course_status(course_id):
 
 
 if __name__ == "__main__":
-    # Debug mode is convenient while developing locally.
-    app.run(debug=True)
+    app.run()
