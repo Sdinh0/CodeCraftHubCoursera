@@ -34,7 +34,16 @@ def test_home_serves_learning_dashboard(client):
     assert response.status_code == 200
     assert response.mimetype == "text/html"
     assert b"CodeCraftHub: Your Learning Management Platform" in response.data
+    assert b'/static/favicon.ico' in response.data
     assert b'/static/style.css' in response.data
+
+
+def test_dashboard_favicon_is_served(client):
+    response = client.get("/static/favicon.ico")
+
+    assert response.status_code == 200
+    assert response.mimetype == "image/x-icon"
+    assert response.data.startswith(b"\x00\x00\x01\x00")
 
 
 def test_dashboard_stylesheet_is_served(client):
