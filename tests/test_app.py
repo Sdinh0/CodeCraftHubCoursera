@@ -43,7 +43,7 @@ def test_dashboard_favicon_is_served(client):
     response = client.get("/static/favicon.ico")
 
     assert response.status_code == 200
-    assert response.mimetype == "image/x-icon"
+    assert response.mimetype in {"image/vnd.microsoft.icon", "image/x-icon"}
     assert response.data.startswith(b"\x00\x00\x01\x00")
 
 
@@ -59,7 +59,7 @@ def test_dashboard_javascript_is_served(client):
     response = client.get("/static/app.js")
 
     assert response.status_code == 200
-    assert response.mimetype == "application/javascript"
+    assert response.mimetype in {"text/javascript", "application/javascript"}
     assert b"async function loadCourses()" in response.data
 
 
