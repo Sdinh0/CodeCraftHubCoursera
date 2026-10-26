@@ -28,11 +28,21 @@ def create_course(client):
     return client.post("/api/courses", json=VALID_COURSE)
 
 
-def test_home_returns_api_overview(client):
+def test_home_serves_learning_dashboard(client):
     response = client.get("/")
 
     assert response.status_code == 200
-    assert "GET /api/courses" in response.get_json()["endpoints"]
+    assert response.mimetype == "text/html"
+    assert b"CodeCraftHub: Your Learning Management Platform" in response.data
+    assert b'/static/style.css' in response.data
+
+
+def test_dashboard_stylesheet_is_served(client):
+    response = client.get("/static/style.css")
+
+    assert response.status_code == 200
+    assert response.mimetype == "text/css"
+    assert b".course-grid" in response.data
 
 
 def test_missing_data_file_is_created_automatically(client):
@@ -110,6 +120,18 @@ def test_patch_updates_course_status(client):
 
     assert response.status_code == 200
     assert response.get_json()["status"] == "Completed"
+
+
+def test_patch_resource_route_updates_course_status(client):
+    created = create_course(client).get_json()
+
+    response = client.patch(
+        f"/api/courses/{created['id']}",
+        json={"status": "In Progress"},
+    )
+
+    assert response.status_code == 200
+    assert response.get_json()["status"] == "In Progress"
 
 
 def test_patch_rejects_fields_other_than_status(client):

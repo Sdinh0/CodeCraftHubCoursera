@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 from typing import Any
 
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify, request, send_file
 
 
 app = Flask(__name__)
@@ -110,22 +110,8 @@ def handle_course_data_error(error):
 
 @app.route("/", methods=["GET"])
 def home():
-    """Show a welcome message and the available API endpoints."""
-    return jsonify(
-        {
-            "message": "Welcome to CodeCraftHub!",
-            "version": "1.0",
-            "description": "A simple learning platform to track your courses",
-            "endpoints": {
-                "GET /api/courses": "Get all courses",
-                "GET /api/courses/<id>": "Get a specific course",
-                "POST /api/courses": "Create a new course",
-                "PUT /api/courses/<id>": "Update a course",
-                "DELETE /api/courses/<id>": "Delete a course",
-                "PATCH /api/courses/<id>/status": "Update course status",
-            },
-        }
-    )
+    """Serve the course dashboard."""
+    return send_file(Path(__file__).resolve().parent / "index.html")
 
 
 @app.route("/api/courses", methods=["GET"])
@@ -215,6 +201,7 @@ def delete_course(course_id):
 
 
 @app.route("/api/courses/<int:course_id>/status", methods=["PATCH"])
+@app.route("/api/courses/<int:course_id>", methods=["PATCH"])
 def update_course_status(course_id):
     """Update the status without replacing the whole course."""
     payload = get_course_payload()
